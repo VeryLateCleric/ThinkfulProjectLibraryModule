@@ -56,7 +56,37 @@ function getMostPopularBooks(books) {
   }));
 }
 
-function getMostPopularAuthors(books, authors) {}
+function getMostPopularAuthors(books, authors) {
+  // create an empty object {}
+  const authorBorrowCounts = {};
+  // Calculate borrowCount of each author. Here we first extract authorId and borrowsCount.
+  books.forEach(book => {
+    const authorId = book.authorId;
+    const borrowCount = book.borrows.length;
+  // Case for if there are no borrows yet for author, set borrows for author to 0. Then we can add
+    if (!authorBorrowCounts[authorId]) {
+      authorBorrowCounts[authorId] = 0;
+    }
+  // Now we add borrowCount to authorBorrowCount for that specific author [authorId]
+    authorBorrowCounts[authorId] += borrowCount
+  })
+  // Here we want to make an array of objects out of authorBorrowCounts using Object.entries
+  const authorArray = Object.entries(authorBorrowCounts).map(([authorId, borrowCount]) => {
+    const author = authors.find(author => author.id === parseInt(authorId));
+    return {
+      author,
+      borrowCount,
+    };
+  })
+  // SOrt array by borrow count into descending order
+  authorArray.sort((a, b) => b.borrowCount - a.borrowCount);
+  // take top 5
+  const topAuthors = authorArray.slice(0, 5);
+  return topAuthors.map(authorObject => ({
+    name: `${authorObject.author.name.first} ${authorObject.author.name.last}`,
+    count: authorObject.borrowCount,
+  }))
+}
 
 module.exports = {
   getTotalBooksCount,
