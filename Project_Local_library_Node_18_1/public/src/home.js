@@ -13,7 +13,30 @@ function getBooksBorrowedCount(books) {
     return books.filter(books => !books.borrows[0].returned).length
 }
 
-function getMostCommonGenres(books) {}
+function getMostCommonGenres(books) {
+  // Create an object to store the genre counts
+  const genreCounts = {};
+
+  // Calculate the genre counts for each book
+  books.forEach(book => {
+    const genres = Array.isArray(book.genre) ? book.genre : [book.genre];
+    
+    genres.forEach(genre => {
+      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+    });
+  });
+  // Convert the genreCounts object to an array of objects
+  const genreArray = Object.entries(genreCounts).map(([genre, count]) => ({
+    name: genre,
+    count,
+  }));
+  // Sort the array in descending order
+  genreArray.sort((a, b) => b.count - a.count);
+  // Take top 5 only with .slice
+  const topGenres = genreArray.slice(0, 5);
+  // Return an array of genre objects with 'name' and 'count' properties
+  return topGenres;
+}
 
 function getMostPopularBooks(books) {}
 
