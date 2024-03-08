@@ -38,7 +38,23 @@ function getMostCommonGenres(books) {
   return topGenres;
 }
 
-function getMostPopularBooks(books) {}
+function getMostPopularBooks(books) {
+  // create new array that checks each book in original array for their title and borrowCOunt
+  // count is calculated with borrows.length
+  const booksWithBorrowCounts = books.map(book => ({
+    title: book.title,
+    borrowCount: book.borrows.length,
+  }));
+  // sort books in order of most borrowed to least
+  booksWithBorrowCounts.sort((a, b) => b.borrowCount - a.borrowCount);
+  // take top 5 books with .slice
+  const topBooks = booksWithBorrowCounts.slice(0, 5);
+  // since we want to return the books with the keys "name" and "count" map this out
+  return topBooks.map(book => ({
+    name: book.title,
+    count: book.borrowCount,
+  }));
+}
 
 function getMostPopularAuthors(books, authors) {}
 
